@@ -7,6 +7,8 @@ import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
 
 import fr.etrenak.jumpcreator.elements.JumpBlock;
+import fr.etrenak.jumpcreator.elements.JumpElement;
+import fr.etrenak.jumpcreator.elements.LadderTower;
 
 public class JumpLevel
 {
@@ -15,7 +17,7 @@ public class JumpLevel
 	private int maxGap;
 	private int minGap;
 
-	private List<JumpBlock> blocks;
+	private List<JumpElement> elements;
 
 	private int changeDirectionChance;
 	private int blockOverHeadChance;
@@ -32,18 +34,27 @@ public class JumpLevel
 
 		defaultBlock = new JumpBlock(config.getConfigurationSection("DefaultBlock"));
 
-		blocks = new ArrayList<JumpBlock>();
-		for(String key : config.getConfigurationSection("BlocksChances").getKeys(false))
-			for(int i = 0; i < config.getInt("BlocksChances." + key + ".Chance"); i++)
-				blocks.add(new JumpBlock(config.getConfigurationSection("BlocksChances." + key)));
+		elements = new ArrayList<JumpElement>();
+		for(String key : config.getConfigurationSection("Elements").getKeys(false))
+			for(int i = 0; i < config.getInt("Elements." + key + ".Chance"); i++)
+				switch(config.getString("Elements." + key + ".Type"))
+				{
+					case "Block":
+						elements.add(new JumpBlock(config.getConfigurationSection("Elements." + key)));
+						break;
+					case "LadderTower":
+						elements.add(new LadderTower(config.getConfigurationSection("Elements." + key)));
+						break;
 
-		for(int i = blocks.size() - 1; i < 100; i++)
-			blocks.add(defaultBlock);
+				}
+
+		for(int i = elements.size() - 1; i < 100; i++)
+			elements.add(defaultBlock);
 	}
 
-	public JumpBlock getRandomJumpBlock(Random rdm)
+	public JumpElement getRandomElement(Random rdm)
 	{
-		return blocks.get(rdm.nextInt(100));
+		return elements.get(rdm.nextInt(100));
 	}
 
 	public JumpBlock getDefaultBlock()

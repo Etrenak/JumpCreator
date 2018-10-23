@@ -1,8 +1,8 @@
-package fr.etrenak.jumpcreator;
+package fr.etrenak.jumpcreator.utils;
 
 import java.awt.Point;
 
-public class Util
+public class MathUtil
 {
 
 	/**

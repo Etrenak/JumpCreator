@@ -5,50 +5,30 @@ import org.bukkit.Material;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class JumpBlock
+public class JumpBlock extends JumpElement
 {
 	private Material mat;
 	private byte data;
-	private boolean isThin;
-	private int size;
 	private String owner;
 
 	public JumpBlock(ConfigurationSection config)
 	{
-		mat = Material.valueOf(config.getString("Type"));
+		super(config);
+		mat = Material.valueOf(config.getString("Material"));
 
 		data = config.contains("Data") ? (byte) config.getInt("Data") : 0;
 
-		isThin = config.contains("Thin") ? config.getBoolean("Thin") : false;
-
-		size = config.contains("Size") ? config.getInt("Size") : 1;
-
 		owner = config.contains("Owner") ? config.getString("Owner") : null;
+//		System.out.println(this);
 
 	}
 
-	public JumpBlock(Material mat, byte data, int size, boolean isThin)
+	protected JumpBlock(Material mat, byte data, String owner, ElementSide inOut)
 	{
-		this(mat, data, size, isThin, null);
-	}
-
-	public JumpBlock(Material mat, byte data, int size, boolean isThin, String owner)
-	{
+		super(inOut, inOut);
 		this.mat = mat;
 		this.data = data;
-		this.isThin = isThin;
-		this.size = size;
 		this.owner = owner;
-	}
-
-	public boolean isThin()
-	{
-		return isThin;
-	}
-
-	public int getSize()
-	{
-		return size;
 	}
 
 	public Material getType()
@@ -62,7 +42,7 @@ public class JumpBlock
 	}
 
 	@SuppressWarnings("deprecation")
-	public void place(Location loc)
+	public int generate(Location loc, double angle)
 	{
 		loc.getBlock().setType(mat);
 		loc.getBlock().setData(data);
@@ -72,10 +52,20 @@ public class JumpBlock
 			skull.setOwner(owner);
 			skull.update();
 		}
+		return 1;
 	}
 
 	public JumpBlock clone()
 	{
-		return new JumpBlock(mat, data, size, isThin, owner);
+		return new JumpBlock(mat, data, owner, in);
 	}
+
+	@Override
+	public String toString()
+	{
+
+		//TOFO
+		return "JumpBlock [mat=" + mat + ", data=" + data + ", owner=" + owner + ", inh=" + in.getHeight() + ", inw=" + in.getWidth() + ", outh=" + out.getHeight() + ", outw=" + out.getWidth() + "]";
+	}
+
 }

@@ -2,57 +2,77 @@ Easy:
   MaxGap: 3
   MinGap: 1
   ChangeDirectionChance: 10
-  BlocksChances:
+  Elements:
     FENCE: 
-      Type: "FENCE"
+      Type: "Block"
+      Material: "FENCE"
       Chance: 5
     IRON_FENCE: 
-      Type: "IRON_FENCE"
+      Type: "Block"
+      Material: "IRON_FENCE"
       Chance: 3
     PACKED_ICE: 
-      Type: "PACKED_ICE"
+      Type: "Block"
+      Material: "PACKED_ICE"
       Chance: 3
   DefaultBlock: 
-    Type: "STAINED_GLASS"
+    Type: "Block"
+    Material: "STAINED_GLASS"
     Data: 5
   BlockOverHeadChance: 2
 Ultra:
   MaxGap: 4
   MinGap: 3
   ChangeDirectionChance: 65
-  BlocksChances:
+  Elements:
     FENCE:
-      Type: "FENCE"
+      Type: "Block"
+      Material: "FENCE"
       Chance: 10
-      Size: 1.5
-      Thin: true
+      Height: 1.5
+      Width: 0.5
     IRON_FENCE:
-      Type: "IRON_FENCE"
+      Type: "Block"
+      Material: "IRON_FENCE"
       Chance: 5
-      Thin: true
+      Width: 0.5
     PACKED_ICE: 
-      Type: "PACKED_ICE"
+      Type: "Block"
+      Material: "PACKED_ICE"
       Chance: 10
     ICE: 
-      Type: "ICE"
+      Type: "Block"
+      Material: "ICE"
       Chance: 20
     CACTUS: 
-      Type: "CACTUS"
+      Type: "Block"
+      Material: "CACTUS"
       Chance: 10
     SKULL:
-      Type: "SKULL"
+      Type: "Block"
+      Material: "SKULL"
       Chance: 5
       Data: 3
       Owner: "FuzeIII"
-      Size: 0.5
-      Thin: true
+      Height: 0.5
+      Width: 0.5
     COBBLE_WALL:
-      Type: "COBBLE_WALL"
+      Type: "Block"
+      Material: "COBBLE_WALL"
       Chance: 5
       Data: 1
-      Size: 1.5
-      Thin: true
+      Height: 1.5
+      Width: 0.5
+    LadderTower:
+      Type: "LadderTower"
+      Chance: 7
+      Size: 3
+    BigLadderTower:
+      Type: "LadderTower"
+      Chance: 2
+      Size: 10
   BlockOverHeadChance: 10
   DefaultBlock: 
-    Type: "STAINED_GLASS"
+    Type: "Block"
+    Material: "STAINED_GLASS"
     Data: 10

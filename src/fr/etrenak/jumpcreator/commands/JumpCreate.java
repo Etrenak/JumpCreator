@@ -16,9 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Directional;
 
 import fr.etrenak.jumpcreator.JumpCreator;
-import fr.etrenak.jumpcreator.Util;
 import fr.etrenak.jumpcreator.config.JumpLevel;
 import fr.etrenak.jumpcreator.elements.JumpBlock;
+import fr.etrenak.jumpcreator.elements.JumpElement;
+import fr.etrenak.jumpcreator.utils.MathUtil;
 
 public class JumpCreate implements CommandExecutor
 {
@@ -53,13 +54,19 @@ public class JumpCreate implements CommandExecutor
 		Random rdm = new Random();
 
 		boolean jumpable;
-		JumpBlock rdmBlock = level.getRandomJumpBlock(rdm);
-		JumpBlock prevBlock = rdmBlock.clone();
+
+		JumpElement rdmElement = null;
+		do
+		{
+			rdmElement = level.getRandomElement(rdm);
+		}while(!(rdmElement instanceof JumpBlock));
+
+		JumpElement prevElement = rdmElement.clone();
 		int deltaY = 1;
 
 		previousLocs.clear();
 
-		rdmBlock.place(current);
+		rdmElement.generate(current, 0);
 
 		prevLoc = current.clone();
 		previousLocs.add(prevLoc);
@@ -70,19 +77,24 @@ public class JumpCreate implements CommandExecutor
 
 		for(int jumpLocIndex = 0; jumpLocIndex < Integer.parseInt(args[0]); jumpLocIndex++)
 		{
-			deltaY = 1;
-			rdmBlock = level.getRandomJumpBlock(rdm);
+			prevElement = rdmElement.clone();
+			do
+			{
+				rdmElement = level.getRandomElement(rdm);
+			}while(!(prevElement instanceof JumpBlock) && !(rdmElement instanceof JumpBlock));
 			length = rdm.nextInt(level.getMaxGap() + 1 - level.getMinGap()) + level.getMinGap();
 
-			if(rdmBlock.getSize() > 1)
-				deltaY = 0;
+			if(rdmElement.getIn().getHeight() > 1)
+				deltaY -= 1;
 
-			if(prevBlock.getSize() < 1 && rdmBlock.getSize() >= 1)
-				deltaY = 0;
+			if(prevElement.getOut().getHeight() < 1 && rdmElement.getIn().getHeight() >= 1)
+				deltaY -= 1;
 
-			if(prevBlock.isThin() || rdmBlock.isThin())
+			if(prevElement.getOut().getWidth() < 1 || rdmElement.getIn().getWidth() < 1)
 				if(length > 1)
 					length -= 1;
+			if(prevElement.getOut().getWidth() >= 1.5 || rdmElement.getIn().getWidth() > 1.5)
+				length += 1;
 
 			jumpable = false;
 
@@ -105,7 +117,7 @@ public class JumpCreate implements CommandExecutor
 				{
 					for(int prevLocsIndex = 1; prevLocsIndex <= Math.min(previousLocs.size() - 1, 3); prevLocsIndex++)
 					{
-						if(Util.getDistanceToSegment(previousLocs.get(previousLocs.size() - prevLocsIndex).getBlockX(), previousLocs.get(previousLocs.size() - prevLocsIndex).getBlockZ(), previousLocs.get(previousLocs.size() - prevLocsIndex - 1).getBlockX(), previousLocs.get(previousLocs.size() - prevLocsIndex - 1).getBlockZ(), current.getBlockX(), current.getBlockZ()) < Math.min(length, 2))
+						if(MathUtil.getDistanceToSegment(previousLocs.get(previousLocs.size() - prevLocsIndex).getBlockX(), previousLocs.get(previousLocs.size() - prevLocsIndex).getBlockZ(), previousLocs.get(previousLocs.size() - prevLocsIndex - 1).getBlockX(), previousLocs.get(previousLocs.size() - prevLocsIndex - 1).getBlockZ(), current.getBlockX(), current.getBlockZ()) < Math.min(length, 2))
 						{
 							jumpable = false;
 							break;
@@ -124,7 +136,7 @@ public class JumpCreate implements CommandExecutor
 
 			}
 
-			rdmBlock.place(current);
+			deltaY = rdmElement.generate(current, angle);
 
 			prevLoc = current.clone();
 			previousLocs.add(prevLoc);

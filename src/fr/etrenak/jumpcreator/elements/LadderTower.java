@@ -1,17 +1,26 @@
 package fr.etrenak.jumpcreator.elements;
 
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
+
+import fr.etrenak.jumpcreator.utils.Util;
 
 public class LadderTower extends JumpElement
 {
 	private int size;
-	private BlockFace start;
 
-	public LadderTower(int size, BlockFace start)
+	protected LadderTower(int size)
 	{
+		super(new ElementSide(1.5d, 1.5d), new ElementSide(0.5d, 1.0d));
 		this.size = size;
-		this.start = start;
+	}
+
+	public LadderTower(ConfigurationSection config)
+	{
+		super(new ElementSide(1.5d, 1.5d), new ElementSide(0.5d, 1.0d));
+		size = config.getInt("Size");
 	}
 
 	public int getSize()
@@ -19,19 +28,31 @@ public class LadderTower extends JumpElement
 		return size;
 	}
 
-	public BlockFace getStart()
+	@Override
+	public int generate(Location loc, double angle)
 	{
-		return start;
+		angle = Math.toRadians((Math.round(Math.toDegrees(angle) / 90) * 90) - 180);
+
+		loc = loc.clone();
+		for(int i = 0; i < size; i++)
+		{
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			Block ladder = loc.clone().add(Math.cos(angle), 0, Math.sin(angle)).getBlock();
+			ladder.setType(Material.LADDER);
+			Util.fixAttachingFace(ladder, Material.QUARTZ_BLOCK);
+			angle -= Math.PI / 2;
+		}
+		loc.add(0, 1, 0);
+		loc.getBlock().setType(Material.STEP);
+
+		return size + 1 /* Block de fin */ + 1 /*dalle*/;
 	}
 
 	@Override
-	public void generate(Location loc)
+	public LadderTower clone()
 	{
-		loc = loc.clone();
-		for(int i = 0;i<size;i++)
-		{
-			loc.add(0,1,0);
-		}
+		return new LadderTower(size);
 	}
 
 }
