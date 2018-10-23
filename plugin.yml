@@ -1,0 +1,9 @@
+name: JumpCreator
+version: 1.0.0
+author: Etrenak
+main: fr.etrenak.jumpcreator.JumpCreator
+
+commands:
+ JumpCreate:
+ JDebug:
+  

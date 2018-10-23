@@ -1,0 +1,58 @@
+Easy:
+  MaxGap: 3
+  MinGap: 1
+  ChangeDirectionChance: 10
+  BlocksChances:
+    FENCE: 
+      Type: "FENCE"
+      Chance: 5
+    IRON_FENCE: 
+      Type: "IRON_FENCE"
+      Chance: 3
+    PACKED_ICE: 
+      Type: "PACKED_ICE"
+      Chance: 3
+  DefaultBlock: 
+    Type: "STAINED_GLASS"
+    Data: 5
+  BlockOverHeadChance: 2
+Ultra:
+  MaxGap: 4
+  MinGap: 3
+  ChangeDirectionChance: 65
+  BlocksChances:
+    FENCE:
+      Type: "FENCE"
+      Chance: 10
+      Size: 1.5
+      Thin: true
+    IRON_FENCE:
+      Type: "IRON_FENCE"
+      Chance: 5
+      Thin: true
+    PACKED_ICE: 
+      Type: "PACKED_ICE"
+      Chance: 10
+    ICE: 
+      Type: "ICE"
+      Chance: 20
+    CACTUS: 
+      Type: "CACTUS"
+      Chance: 10
+    SKULL:
+      Type: "SKULL"
+      Chance: 5
+      Data: 3
+      Owner: "FuzeIII"
+      Size: 0.5
+      Thin: true
+    COBBLE_WALL:
+      Type: "COBBLE_WALL"
+      Chance: 5
+      Data: 1
+      Size: 1.5
+      Thin: true
+  BlockOverHeadChance: 10
+  DefaultBlock: 
+    Type: "STAINED_GLASS"
+    Data: 10
