@@ -10,6 +10,12 @@ public class Util
 {
 	private static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 
+	public static BlockFace getBlockFace(double angle)
+	{
+		angle = Math.toRadians((Math.round(Math.toDegrees(angle) / 90) * 90) - 180);
+		return faces[(int) Math.abs(Math.round(Math.toDegrees(angle) / 90))];
+	}
+
 	public static void fixAttachingFace(Block b, Material toAttach)
 	{
 		for(BlockFace face : faces)

@@ -5,6 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.ConfigurationSection;
 
+import fr.etrenak.jumpcreator.config.JumpLevel;
+import fr.etrenak.jumpcreator.utils.Util;
+
 public class JumpBlock extends JumpElement
 {
 	private Material mat;
@@ -19,7 +22,7 @@ public class JumpBlock extends JumpElement
 		data = config.contains("Data") ? (byte) config.getInt("Data") : 0;
 
 		owner = config.contains("Owner") ? config.getString("Owner") : null;
-//		System.out.println(this);
+		//		System.out.println(this);
 
 	}
 
@@ -42,7 +45,7 @@ public class JumpBlock extends JumpElement
 	}
 
 	@SuppressWarnings("deprecation")
-	public int generate(Location loc, double angle)
+	public int[] generate(Location loc, double angle, JumpLevel level)
 	{
 		loc.getBlock().setType(mat);
 		loc.getBlock().setData(data);
@@ -51,8 +54,9 @@ public class JumpBlock extends JumpElement
 			Skull skull = (Skull) loc.getBlock().getState();
 			skull.setOwner(owner);
 			skull.update();
+			skull.setRotation(Util.getBlockFace(angle).getOppositeFace());
 		}
-		return 1;
+		return new int[] {0, 1, 0};
 	}
 
 	public JumpBlock clone()
@@ -63,8 +67,6 @@ public class JumpBlock extends JumpElement
 	@Override
 	public String toString()
 	{
-
-		//TOFO
 		return "JumpBlock [mat=" + mat + ", data=" + data + ", owner=" + owner + ", inh=" + in.getHeight() + ", inw=" + in.getWidth() + ", outh=" + out.getHeight() + ", outw=" + out.getWidth() + "]";
 	}
 

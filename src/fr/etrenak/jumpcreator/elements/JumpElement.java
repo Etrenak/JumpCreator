@@ -3,6 +3,8 @@ package fr.etrenak.jumpcreator.elements;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
+import fr.etrenak.jumpcreator.config.JumpLevel;
+
 public abstract class JumpElement implements Cloneable
 {
 	protected ElementSide in;
@@ -20,7 +22,7 @@ public abstract class JumpElement implements Cloneable
 		out = new ElementSide(config.contains("Out") ? config.getConfigurationSection("Out") : config);
 	}
 
-	public abstract int generate(Location loc, double angle);
+	public abstract int[] generate(Location loc, double angle, JumpLevel level);
 
 	public abstract JumpElement clone();
 

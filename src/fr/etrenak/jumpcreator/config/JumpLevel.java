@@ -9,6 +9,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import fr.etrenak.jumpcreator.elements.JumpBlock;
 import fr.etrenak.jumpcreator.elements.JumpElement;
 import fr.etrenak.jumpcreator.elements.LadderTower;
+import fr.etrenak.jumpcreator.elements.RoofedBlock;
+import fr.etrenak.jumpcreator.elements.Wall;
 
 public class JumpLevel
 {
@@ -42,8 +44,17 @@ public class JumpLevel
 					case "Block":
 						elements.add(new JumpBlock(config.getConfigurationSection("Elements." + key)));
 						break;
+
 					case "LadderTower":
 						elements.add(new LadderTower(config.getConfigurationSection("Elements." + key)));
+						break;
+
+					case "RoofedBlock":
+						elements.add(new RoofedBlock());
+						break;
+						
+					case "Wall":
+						elements.add(new Wall(config.getConfigurationSection("Elements." + key)));
 						break;
 
 				}

@@ -39,7 +39,7 @@ Ultra:
     PACKED_ICE: 
       Type: "Block"
       Material: "PACKED_ICE"
-      Chance: 10
+      Chance: 5
     ICE: 
       Type: "Block"
       Material: "ICE"
@@ -47,7 +47,7 @@ Ultra:
     CACTUS: 
       Type: "Block"
       Material: "CACTUS"
-      Chance: 10
+      Chance: 6
     SKULL:
       Type: "Block"
       Material: "SKULL"
@@ -63,15 +63,25 @@ Ultra:
       Data: 1
       Height: 1.5
       Width: 0.5
-    LadderTower:
+    LadderTower_3:
       Type: "LadderTower"
-      Chance: 7
+      Chance: 5
       Size: 3
-    BigLadderTower:
+    LadderTower_10:
       Type: "LadderTower"
-      Chance: 2
+      Chance: 1
       Size: 10
-  BlockOverHeadChance: 10
+    RoofedBlock:
+      Type: "RoofedBlock"
+      Chance: 7
+    Wall_4:
+      Type: "Wall"
+      Chance: 5
+      Gap: 4
+    Wall_2:
+      Type: "Wall"
+      Chance: 3
+      Gap: 2
   DefaultBlock: 
     Type: "Block"
     Material: "STAINED_GLASS"

@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Directional;
 
 import fr.etrenak.jumpcreator.JumpCreator;
 import fr.etrenak.jumpcreator.config.JumpLevel;
@@ -51,6 +46,7 @@ public class JumpCreate implements CommandExecutor
 		Location prevLoc = current.clone();
 		double angle = 0;
 		double length = 0;
+		int blocksSinceLastStructure = 10;
 		Random rdm = new Random();
 
 		boolean jumpable;
@@ -62,37 +58,39 @@ public class JumpCreate implements CommandExecutor
 		}while(!(rdmElement instanceof JumpBlock));
 
 		JumpElement prevElement = rdmElement.clone();
-		int deltaY = 1;
+		int[] delta = {0, 1, 0};
 
 		previousLocs.clear();
 
-		rdmElement.generate(current, 0);
+		rdmElement.generate(current.clone(), 0, level);
 
 		prevLoc = current.clone();
 		previousLocs.add(prevLoc);
 
-		for(Entity en : p.getWorld().getEntities())
-			if(!(en instanceof Player))
-				en.remove();
-
 		for(int jumpLocIndex = 0; jumpLocIndex < Integer.parseInt(args[0]); jumpLocIndex++)
 		{
+			blocksSinceLastStructure++;
 			prevElement = rdmElement.clone();
 			do
 			{
 				rdmElement = level.getRandomElement(rdm);
 			}while(!(prevElement instanceof JumpBlock) && !(rdmElement instanceof JumpBlock));
+
+			if(!(rdmElement instanceof JumpBlock))
+				blocksSinceLastStructure = 0;
+
 			length = rdm.nextInt(level.getMaxGap() + 1 - level.getMinGap()) + level.getMinGap();
 
 			if(rdmElement.getIn().getHeight() > 1)
-				deltaY -= 1;
+				delta[1] -= 1;
 
 			if(prevElement.getOut().getHeight() < 1 && rdmElement.getIn().getHeight() >= 1)
-				deltaY -= 1;
+				delta[1] -= 1;
 
 			if(prevElement.getOut().getWidth() < 1 || rdmElement.getIn().getWidth() < 1)
 				if(length > 1)
 					length -= 1;
+
 			if(prevElement.getOut().getWidth() >= 1.5 || rdmElement.getIn().getWidth() > 1.5)
 				length += 1;
 
@@ -107,11 +105,11 @@ public class JumpCreate implements CommandExecutor
 				do
 				{
 					angle = Math.toRadians(rdm.nextInt(361));
-				}while(nonJumpableRounds < 5 && (changeDirection && Math.min(Math.abs(angle - prevAngle), Math.abs(2 * Math.PI - Math.abs(angle - prevAngle))) < 3 * Math.PI / 4.0d || !changeDirection && Math.min(Math.abs(angle - prevAngle), Math.abs(2 * Math.PI - Math.abs(angle - prevAngle))) > Math.PI / 4.0d));
+				}while(nonJumpableRounds < 5 && (blocksSinceLastStructure < 3 && MathUtil.isAcute(angle, prevAngle) || blocksSinceLastStructure > 2 && (changeDirection && MathUtil.isObtuse(angle, prevAngle) || !changeDirection && MathUtil.isAcute(angle, prevAngle))));
 
-				current.setX(Math.round(length * Math.cos(angle)) + prevLoc.getBlockX());
-				current.setZ(Math.round(length * Math.sin(angle)) + prevLoc.getBlockZ());
-				current.setY(prevLoc.getY() + deltaY);
+				current.setX(Math.round(length * Math.cos(angle)) + prevLoc.getBlockX() + delta[0]);
+				current.setZ(Math.round(length * Math.sin(angle)) + prevLoc.getBlockZ() + delta[2]);
+				current.setY(prevLoc.getY() + delta[1]);
 
 				if(previousLocs.size() > 1)
 				{
@@ -136,49 +134,12 @@ public class JumpCreate implements CommandExecutor
 
 			}
 
-			deltaY = rdmElement.generate(current, angle);
+			delta = rdmElement.generate(current.clone(), angle, level);
 
 			prevLoc = current.clone();
 			previousLocs.add(prevLoc);
 		}
 
 		return true;
-	}
-
-	public void orienteBlock(int degAngle, Block b)
-	{
-		BlockState state = b.getState();
-		if(!(state.getData() instanceof Directional))
-			return;
-
-		Directional metaData = (Directional) state.getData();
-		metaData.setFacingDirection(getBlockFace(degAngle).getOppositeFace());
-	}
-
-	public static BlockFace getBlockFace(int angle)
-	{
-		angle = angle + 90;
-
-		if(angle < 0)
-			angle += 360.0;
-
-		if(0 <= angle && angle < 67.5)
-			return BlockFace.NORTH;
-
-		else if(67.5 <= angle && angle < 157.5)
-			return BlockFace.EAST;
-
-		else if(157.5 <= angle && angle < 247.5)
-			return BlockFace.SOUTH;
-
-		else if(247.5 <= angle && angle < 337.5)
-			return BlockFace.WEST;
-
-		else if(337.5 <= angle && angle < 360.0)
-			return BlockFace.NORTH;
-
-		else
-			return null;
-
 	}
 }

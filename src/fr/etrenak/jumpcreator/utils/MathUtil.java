@@ -143,4 +143,14 @@ public class MathUtil
 
 		return closestPoint;
 	}
+
+	public static boolean isAcute(double angle, double prevAngle)
+	{
+		return Math.min(Math.abs(angle - prevAngle), Math.abs(2 * Math.PI - Math.abs(angle - prevAngle))) > Math.PI / 4.0d;
+	}
+	
+	public static boolean isObtuse(double angle, double prevAngle)
+	{
+		return Math.min(Math.abs(angle - prevAngle), Math.abs(2 * Math.PI - Math.abs(angle - prevAngle))) < 3 * Math.PI / 4.0d;
+	}
 }
