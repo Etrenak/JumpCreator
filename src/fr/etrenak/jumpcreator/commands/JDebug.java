@@ -2,6 +2,7 @@ package fr.etrenak.jumpcreator.commands;
 
 import java.util.HashSet;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -32,13 +33,22 @@ public class JDebug implements CommandExecutor
 		{
 			HashSet<Byte> set = new HashSet<Byte>();
 			set.add((byte) 0);
-			 p.getTargetBlock(set, 10).setType(Material.LADDER);
+			p.getTargetBlock(set, 10).setType(Material.LADDER);
 			BlockState state = p.getTargetBlock(set, 10).getState();
 			Ladder l = (Ladder) state.getData();
 			l.setFacingDirection(BlockFace.valueOf(args[1]));
 
 			//			state.setData(l);
 			state.update(true);
+		}
+
+		else if(args[0].equalsIgnoreCase("update"))
+		{
+			HashSet<Byte> set = new HashSet<Byte>();
+			set.add((byte) 0);
+			Location loc = p.getTargetBlock(set, 10).getLocation().clone();
+			loc.getBlock().setTypeId(Material.AIR.getId(), false);
+			loc.clone().add(1, 0, 0).getBlock().setType(Material.AIR);
 		}
 		return true;
 

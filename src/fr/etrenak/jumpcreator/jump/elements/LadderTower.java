@@ -1,4 +1,6 @@
-package fr.etrenak.jumpcreator.elements;
+package fr.etrenak.jumpcreator.jump.elements;
+
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,18 +15,18 @@ public class LadderTower extends JumpElement
 	private int size;
 	private Material towerBlockType;
 
-	protected LadderTower(int size, Material towerBlockType)
-	{
-		super(new ElementSide(1.5d, 1.5d), new ElementSide(0.5d, 1.0d));
-		this.size = size;
-		this.towerBlockType = towerBlockType;
-	}
-
 	public LadderTower(ConfigurationSection config)
 	{
 		super(new ElementSide(1.5d, 1.5d), new ElementSide(0.5d, 1.0d));
 		size = config.getInt("Size");
 		towerBlockType = config.contains("TowerBlockType") ? Material.valueOf(config.getString("TowerBlockType")) : Material.QUARTZ_BLOCK;
+	}
+
+	public LadderTower(ElementSide in, ElementSide out, Location location, List<Location> usedLocs, int size, Material towerBlockType)
+	{
+		super(in, out, location, usedLocs);
+		this.size = size;
+		this.towerBlockType = towerBlockType;
 	}
 
 	public int getSize()
@@ -39,23 +41,40 @@ public class LadderTower extends JumpElement
 
 		for(int i = 0; i < size; i++)
 		{
+
 			loc.add(0, 1, 0);
-			loc.getBlock().setType(towerBlockType);
+			Util.setBlockTypeThreadSafe(loc, towerBlockType);
+			usedLocs.add(loc.clone());
+			
 			Block ladder = loc.clone().add(Math.cos(angle), 0, Math.sin(angle)).getBlock();
-			ladder.setType(Material.LADDER);
-			Util.fixAttachingFace(ladder, towerBlockType);
+
+			Util.useBukkitThreadSafe(new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					ladder.setType(Material.LADDER);
+					Util.fixAttachingFace(ladder, towerBlockType);
+				}
+			});
+			
+			usedLocs.add(ladder.getLocation().clone());
+
 			angle -= Math.PI / 2;
 		}
 		loc.add(0, 1, 0);
-		loc.getBlock().setType(Material.STEP);
+		Util.setBlockTypeThreadSafe(loc, Material.STEP);
+		usedLocs.add(loc.clone());
 
-		return new int[]{0,size + 1 /* Block de fin */ + 1 /*dalle*/, 0};
+		setLocation(loc.clone());
+		return new int[] {0, size + 1 /* Block de fin */ + 1 /*dalle*/, 0};
 	}
 
 	@Override
 	public LadderTower clone()
 	{
-		return new LadderTower(size, towerBlockType);
+		return new LadderTower(in, out, location, usedLocs, size, towerBlockType);
 	}
 
 }

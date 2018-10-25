@@ -1,4 +1,4 @@
-package fr.etrenak.jumpcreator.elements;
+package fr.etrenak.jumpcreator.jump.elements;
 
 import org.bukkit.configuration.ConfigurationSection;
 

@@ -8,9 +8,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.etrenak.jumpcreator.commands.CreateJump;
 import fr.etrenak.jumpcreator.commands.JDebug;
-import fr.etrenak.jumpcreator.commands.JumpCreate;
+import fr.etrenak.jumpcreator.commands.RemoveJump;
 import fr.etrenak.jumpcreator.config.LevelsManager;
+import fr.etrenak.jumpcreator.jump.JumpsManager;
 
 public class JumpCreator extends JavaPlugin
 {
@@ -18,16 +20,19 @@ public class JumpCreator extends JavaPlugin
 	
 	private FileConfiguration config;
 	private LevelsManager levelsManager;
+	private JumpsManager jumpsManager;
 	
 	public void onEnable()
 	{
 		instance = this;
-		getCommand("JumpCreate").setExecutor(new JumpCreate());
+		getCommand("CreateJump").setExecutor(new CreateJump());
+		getCommand("RemoveJump").setExecutor(new RemoveJump());
 		getCommand("JDebug").setExecutor(new JDebug());
 		
 		config = loadConfig("levels.yml");
 		
 		levelsManager = new LevelsManager(config);
+		jumpsManager = new JumpsManager();
 	}
 	
 	public FileConfiguration loadConfig(String path)
@@ -61,5 +66,10 @@ public class JumpCreator extends JavaPlugin
 	public LevelsManager getLevelsManager()
 	{
 		return levelsManager;
+	}
+
+	public JumpsManager getJumpsManager()
+	{
+		return jumpsManager;
 	}
 }

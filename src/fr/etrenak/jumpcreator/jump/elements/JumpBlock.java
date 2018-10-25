@@ -1,4 +1,6 @@
-package fr.etrenak.jumpcreator.elements;
+package fr.etrenak.jumpcreator.jump.elements;
+
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,9 +28,9 @@ public class JumpBlock extends JumpElement
 
 	}
 
-	protected JumpBlock(Material mat, byte data, String owner, ElementSide inOut)
+	public JumpBlock(ElementSide in, ElementSide out, Location location, List<Location> usedLocs, Material mat, byte data, String owner)
 	{
-		super(inOut, inOut);
+		super(in, out, location, usedLocs);
 		this.mat = mat;
 		this.data = data;
 		this.owner = owner;
@@ -47,21 +49,34 @@ public class JumpBlock extends JumpElement
 	@SuppressWarnings("deprecation")
 	public int[] generate(Location loc, double angle, JumpLevel level)
 	{
-		loc.getBlock().setType(mat);
-		loc.getBlock().setData(data);
-		if(mat == Material.SKULL && owner != null)
+
+		Util.useBukkitThreadSafe(new Runnable()
 		{
-			Skull skull = (Skull) loc.getBlock().getState();
-			skull.setOwner(owner);
-			skull.update();
-			skull.setRotation(Util.getBlockFace(angle).getOppositeFace());
-		}
+
+			@Override
+			public void run()
+			{
+				loc.getBlock().setType(mat);
+				loc.getBlock().setData(data);
+				if(mat == Material.SKULL && owner != null)
+				{
+					Skull skull = (Skull) loc.getBlock().getState();
+					skull.setOwner(owner);
+					skull.update();
+					skull.setRotation(Util.getBlockFace(angle).getOppositeFace());
+				}
+			}
+		});
+
+		setLocation(loc.clone());
+
+		usedLocs.add(loc.clone());
 		return new int[] {0, 1, 0};
 	}
 
 	public JumpBlock clone()
 	{
-		return new JumpBlock(mat, data, owner, in);
+		return new JumpBlock(in, out, location, usedLocs, mat, data, owner);
 	}
 
 	@Override

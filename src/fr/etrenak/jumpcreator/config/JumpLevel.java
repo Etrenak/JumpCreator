@@ -6,11 +6,11 @@ import java.util.Random;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import fr.etrenak.jumpcreator.elements.JumpBlock;
-import fr.etrenak.jumpcreator.elements.JumpElement;
-import fr.etrenak.jumpcreator.elements.LadderTower;
-import fr.etrenak.jumpcreator.elements.RoofedBlock;
-import fr.etrenak.jumpcreator.elements.Wall;
+import fr.etrenak.jumpcreator.jump.elements.JumpBlock;
+import fr.etrenak.jumpcreator.jump.elements.JumpElement;
+import fr.etrenak.jumpcreator.jump.elements.LadderTower;
+import fr.etrenak.jumpcreator.jump.elements.RoofedBlock;
+import fr.etrenak.jumpcreator.jump.elements.Wall;
 
 public class JumpLevel
 {
@@ -50,7 +50,7 @@ public class JumpLevel
 						break;
 
 					case "RoofedBlock":
-						elements.add(new RoofedBlock());
+						elements.add(new RoofedBlock(config.getConfigurationSection("Elements." + key)));
 						break;
 						
 					case "Wall":

@@ -1,10 +1,16 @@
 package fr.etrenak.jumpcreator.utils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.Attachable;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import fr.etrenak.jumpcreator.JumpCreator;
 
 public class Util
 {
@@ -33,5 +39,40 @@ public class Util
 				return;
 
 			}
+	}
+
+	public static void setBlockTypeThreadSafe(Location loc, Material type)
+	{
+		useBukkitThreadSafe(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				loc.getBlock().setType(type);
+			}
+		});
+	}
+	
+	public static void useBukkitThreadSafe(Runnable runnable)
+	{
+		AtomicBoolean finished = new AtomicBoolean(false);
+		BukkitRunnable bRunnable = new BukkitRunnable()
+		{
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					runnable.run();
+				}finally
+				{
+					finished.getAndSet(true);
+				}
+			}
+		};
+		bRunnable.runTask(JumpCreator.getInstance());
+		while(!finished.get());
 	}
 }
