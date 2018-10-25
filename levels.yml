@@ -7,19 +7,25 @@ Easy:
       Type: "Block"
       Material: "FENCE"
       Chance: 5
+      Height: 1.5
+      Width: 0.5
     IRON_FENCE: 
       Type: "Block"
       Material: "IRON_FENCE"
       Chance: 3
+      Width: 0.5
     PACKED_ICE: 
       Type: "Block"
       Material: "PACKED_ICE"
       Chance: 3
+    SlabTower:
+      Type: "SlabTower"
+      Chance: 3
+      Size: 3
   DefaultBlock: 
     Type: "Block"
     Material: "STAINED_GLASS"
     Data: 5
-  BlockOverHeadChance: 2
 Ultra:
   MaxGap: 4
   MinGap: 3

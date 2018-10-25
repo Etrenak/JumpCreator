@@ -10,6 +10,7 @@ import fr.etrenak.jumpcreator.jump.elements.JumpBlock;
 import fr.etrenak.jumpcreator.jump.elements.JumpElement;
 import fr.etrenak.jumpcreator.jump.elements.LadderTower;
 import fr.etrenak.jumpcreator.jump.elements.RoofedBlock;
+import fr.etrenak.jumpcreator.jump.elements.SlabTower;
 import fr.etrenak.jumpcreator.jump.elements.Wall;
 
 public class JumpLevel
@@ -47,6 +48,10 @@ public class JumpLevel
 
 					case "LadderTower":
 						elements.add(new LadderTower(config.getConfigurationSection("Elements." + key)));
+						break;
+						
+					case "SlabTower":
+						elements.add(new SlabTower(config.getConfigurationSection("Elements." + key)));
 						break;
 
 					case "RoofedBlock":

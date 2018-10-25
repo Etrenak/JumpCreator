@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 
 import fr.etrenak.jumpcreator.config.JumpLevel;
 import fr.etrenak.jumpcreator.jump.elements.JumpBlock;
 import fr.etrenak.jumpcreator.jump.elements.JumpElement;
 import fr.etrenak.jumpcreator.utils.MathUtil;
+import fr.etrenak.jumpcreator.utils.Util;
 
 public class Jump
 {
@@ -17,7 +19,7 @@ public class Jump
 
 	static
 	{
-		lastId = 0;
+		lastId = 1;
 	}
 
 	private int id;
@@ -35,7 +37,7 @@ public class Jump
 			je.remove();
 	}
 
-	public void generate(JumpLevel level, Location start, int size)
+	public void generate(JumpLevel level, Location start, int size, CommandSender commander)
 	{
 		Thread creatorThread = new Thread(new Runnable()
 		{
@@ -133,6 +135,17 @@ public class Jump
 					prevLoc = current.clone();
 					elements.add(rdmElement.clone());
 				}
+				
+				if(commander != null)
+					Util.useBukkitThreadSafe(new Runnable()
+					{
+						
+						@Override
+						public void run()
+						{
+							commander.sendMessage("§aFélicitations, vous venez de créer le jump §2n°" + getId() + "§a. Si vous souhaitez le supprimer, utilisez la commande /RemoveJump " + getId() +" §c[Définitif]");
+						}
+					});
 			}
 		});
 

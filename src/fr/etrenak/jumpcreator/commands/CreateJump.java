@@ -29,10 +29,9 @@ public class CreateJump implements CommandExecutor
 
 		JumpLevel level = JumpCreator.getInstance().getLevelsManager().getJumpLevel(args[1]);
 		Jump jump = new Jump();
-		jump.generate(level, ((Player) sender).getLocation(), Integer.parseInt(args[0]));
+		jump.generate(level, ((Player) sender).getLocation(), Integer.parseInt(args[0]), sender);
 		JumpCreator.getInstance().getJumpsManager().register(jump);
 
-		sender.sendMessage("§aFélicitations, vous venez de créer le jump §2n°" + jump.getId() + "§a. Si vous souhaitez le supprimer, utilisez la commande /RemoveJump " + jump.getId() +" §c[Définitif]");
 		return true;
 	}
 }
