@@ -16,7 +16,7 @@ public class SlabTower extends JumpElement
 
 	public SlabTower(ConfigurationSection config)
 	{
-		super(new ElementSide(1.0d, 1.0d), new ElementSide(0.5d, 1.0d));
+		super(new ElementSide(1.5d, 1.0d), new ElementSide(0.5d, 1.0d));
 		size = config.getInt("Size");
 		towerBlockType = config.contains("TowerBlockType") ? Material.valueOf(config.getString("TowerBlockType")) : Material.QUARTZ_BLOCK;
 	}
@@ -39,7 +39,7 @@ public class SlabTower extends JumpElement
 		loc.add(Math.cos(angle), 0, Math.sin(angle));
 
 		angle = Math.toRadians((Math.round(Math.toDegrees(angle) / 90) * 90) - 180);
-		
+
 		for(int i = 0; i < size; i++)
 		{
 
@@ -49,7 +49,7 @@ public class SlabTower extends JumpElement
 
 			Util.setBlockTypeThreadSafe(loc.clone().add(Math.cos(angle), 0, Math.sin(angle)), Material.STEP);
 			usedLocs.add(loc.clone().add(Math.cos(angle), 0, Math.sin(angle)));
-			
+
 			angle -= Math.PI / 2;
 		}
 		loc.add(0, 1, 0);

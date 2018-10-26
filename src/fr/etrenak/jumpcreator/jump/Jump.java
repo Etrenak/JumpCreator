@@ -93,7 +93,7 @@ public class Jump
 					jumpable = false;
 
 					double prevAngle = angle;
-					boolean changeDirection = rdm.nextInt(100) > level.getChangeDirectionChance();
+					boolean changeDirection = rdm.nextInt(100) < level.getChangeDirectionChance();
 					int nonJumpableRounds = 0;
 					while(!jumpable)
 					{
