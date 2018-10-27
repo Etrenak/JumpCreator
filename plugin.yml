@@ -5,8 +5,8 @@ main: fr.etrenak.jumpcreator.JumpCreator
 
 commands:
   CreateJump:
-    aliases: ["CJ"]
+    aliases: ["cj"]
   RemoveJump:
-    aliases: ["RmJump", "RJ"]
+    aliases: ["rmjump", "rj"]
   JDebug:
   
