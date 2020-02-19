@@ -6,6 +6,8 @@ dans lesquels on paramètre le squelette des jumps crées avec ce
 level. On choisit par exemple les différents types de blocks, ainsi
 que les paramètres des éléments de jump.
 
+On réutilise ensuite ces levels lors de la création d'un jump en jeu
+
 #### Structure générale
 Voici la structure du fichier de config :
 
